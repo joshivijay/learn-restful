@@ -81,7 +81,7 @@ public class UserController {
 		// return userService.getAllUsers();
 	}
 
-	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "")
 	public CreateUserResponse createUser(@RequestBody CreateUserRequest userRequest) {
 		System.out.println("*** prop is " + prop);
 		User user = new User();
@@ -94,6 +94,20 @@ public class UserController {
 		response.setStatus("Success");
 		return response;
 		// return userService.createUser(userRequest);
+	}
+
+	@GetMapping(path = "/postAsGet", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public CreateUserResponse postUser(@RequestBody CreateUserRequest userRequest) throws Exception {
+		System.out.println("*** prop is " + prop);
+		User user = new User();
+		user.setAge(userRequest.getAge());
+		user.setName(userRequest.getName());
+		User savedUser = userRepository.saveAndFlush(user);
+
+		CreateUserResponse response = new CreateUserResponse();
+		response.setId(savedUser.getId());
+		response.setStatus("Success");
+		return response;
 	}
 
 	@ExceptionHandler(ProblemDetailsException.class)
